@@ -1,0 +1,16 @@
+h2{
+    text-align: center;
+}
+
+.container{
+    max-width: 690px;
+    margin: 0 auto;
+}
+
+.input-wrapper{
+    width: 25%;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: row;
+}
+

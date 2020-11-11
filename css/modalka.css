@@ -1,0 +1,21 @@
+#button{
+    width: 200px;
+    padding: 15px 0px;
+    background: green;
+    cursor: pointer;
+    text-align: center;
+}
+
+#modal{
+    background: black;
+    width: 200px;
+    height: 200px;
+    display: none;
+}
+
+#close-modal{
+    background: red;
+    width: 45px;
+    cursor: pointer;
+}
+
