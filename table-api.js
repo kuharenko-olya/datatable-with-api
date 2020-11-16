@@ -93,7 +93,66 @@ function clickNext() {
 
 
     let contentHeaders = "";
-    let contentBody = "";
+    let tableBody = "";
+
+    var headers = ["id", "name", "status", "species",
+    "type", "gender", "image"];
+
+    contentHeaders += "<tr>";
+
+    headers.map((header) => {
+
+        contentHeaders += "<th>" + header + "</th>";
+  
+    })
+  
+    contentHeaders += "</tr>"
+  
+
+    
+
+    arrayWithObjects.map((elem) => {
+        // console.log(elem);
+
+
+        tableBody += "<tr>";
+
+
+
+        // let elem = {id: '1'}; 
+        // elem.id // 1 
+        // elem['id'] // 1
+
+        //Перебираю массив заголовков 
+        // у объекта elem забираю по ключу заголовка данные 
+
+        headers.map((header) => {
+            // console.log(elem[header]);
+
+            //Cравнивает блоки для совпадения
+            switch (header) {
+                case 'image':
+                    tableBody += "<td><img src='" + elem.image + "'/></td>";
+                    break;
+                default:
+                    tableBody += "<td>" + elem[header] + "</td>";
+                    // console.log(elem[header]);
+                    //у объекта elem забираю по ключу заголовка данные 
+                    //
+                    break;
+
+            }
+           
+            })
+            tableBody += "</tr>"
+        })
+            
+    
+//Записываю в таблицу HTML
+table.innerHTML = contentHeaders + tableBody;
+
+
+
 
     // перебираем массив с объектами arrayWithObjects с помощью метода map
     // метод map получает в качестве первого параметра элемент нашего массива
@@ -137,15 +196,18 @@ function clickNext() {
         image:'url',
         
      }
+     */
      
      
      // перебираем снова массив headers методом map 
-        map принимает в качестве первого параметра элемент
-      этот массив содержит заголовки таблицы и имеет вид :
-        ["id","name","status","type","gender","image"]
+       // map принимает в качестве первого параметра элемент
+      //этот массив содержит заголовки таблицы и имеет вид :
+       // ["id","name","status","type","gender","image"]
      // элемент имеет вид : "id"
      // 
      
      
      // arrayWithObjects.id // 1
-        
+    
+
+    }
