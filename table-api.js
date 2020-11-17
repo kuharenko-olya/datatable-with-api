@@ -1,158 +1,43 @@
-function build() {
+var headers = ["id", "name", "status", "species", "type", "gender", "image"];
+var table = document.getElementById('table');
+var page = 1;
 
+function build() {
     //Запрос api
     xhr = new XMLHttpRequest();
     xhr.open("GET", "https://rickandmortyapi.com/api/character/", false);
     xhr.send();
-    console.log(xhr.responseText);
-    console.log(JSON.parse(xhr.responseText));
 
-
-    //Массив с полученным результатом
+    //Записываем полученные данные в переменную 
     var data = JSON.parse(xhr.responseText).results;
+    let tableHTML = buildTable(data, headers);
+    table.innerHTML = tableHTML;    
+}
 
-    let table = document.getElementById('table');
-    let contentHeaders = "";
-    let contentBody = "";
+function clickHandler(page) {
+    nextPage = new XMLHttpRequest();
+    //                                                              добавляется номер страницы
+    nextPage.open("GET", "https://rickandmortyapi.com/api/character/?page=" + page, false);
+    nextPage.send();
 
-    //   Забираю ключи из объекта
-    //       let responses = Object.keys(data[0]);
-    // не в этом случае
+    var arrayWithObjects = JSON.parse(nextPage.responseText).results;
+    
+    let tableHTML = buildTable(arrayWithObjects, headers);
 
+    // Удаляем старые данные 
+    table.innerHTML = "";
+    //Записываем новые
+    table.innerHTML = tableHTML;
+}
 
-    //Объявила переменную с массивом нужных полей
-    var fields = ["id", "name", "status", "species",
-                              "type", "gender", "image"];
-
-
-
-    //Создала строку таблицы с помощью конкатенации строк 
-    // в результате будет ("<tr>")
-    contentHeaders += "<tr>";
-
-    //Перебрала массив полей и выбрала из массива поле
-    fields.map((field) => {
-
-        //добавила динамически заголовок поля
-
-        contentHeaders += "<th>" + field + "</th>";
-
-    })
-
-    contentHeaders += "</tr>"
-
-    // Перебрала массив data и выбрала из массива значение-данные
-
-    data.map((value) => {
-
-        contentBody += "<tr>";
-
-
-
-        //Перебираю массив
-        fields.map((field) => {
-
-
-            //Cравнивает блоки для совпадения
-            switch (field) {
-                case 'image':
-                    contentBody += "<td><img src='" + value.image + "'/></td>";
-                    break;
-                default:
-                    contentBody += "<td>" + value[field] + "</td>";
-                    // console.log(value[field]);
-                    //Cколько полей было выбрано столько и строк данных
-                    //
-                    break;
-
-            }
-
-        })
-
-        contentBody += "</tr>";
-
-
-    })
-
-    //Записываю в HTMl в таблицу
-    table.innerHTML = contentHeaders + contentBody;
+//Функция клик на предыдущую страницу
+function clickPrev() {
+    clickHandler(--page);
 }
 
 
-
 function clickNext() {
-
-    nextPage = new XMLHttpRequest();
-    nextPage.open("GET", "https://rickandmortyapi.com/api/character/?page=2", false);
-    nextPage.send();
-    console.log(nextPage.responseText);
-    console.log(JSON.parse(nextPage.responseText));
-
-    var arrayWithObjects = JSON.parse(nextPage.responseText).results;
-    let table = document.getElementById('table');
-
-
-    let contentHeaders = "";
-    let tableBody = "";
-
-    var headers = ["id", "name", "status", "species",
-    "type", "gender", "image"];
-
-    contentHeaders += "<tr>";
-
-    headers.map((header) => {
-
-        contentHeaders += "<th>" + header + "</th>";
-  
-    })
-  
-    contentHeaders += "</tr>"
-  
-
-    
-
-    arrayWithObjects.map((elem) => {
-        // console.log(elem);
-
-
-        tableBody += "<tr>";
-
-
-
-        // let elem = {id: '1'}; 
-        // elem.id // 1 
-        // elem['id'] // 1
-
-        //Перебираю массив заголовков 
-        // у объекта elem забираю по ключу заголовка данные 
-
-        headers.map((header) => {
-            // console.log(elem[header]);
-
-            //Cравнивает блоки для совпадения
-            switch (header) {
-                case 'image':
-                    tableBody += "<td><img src='" + elem.image + "'/></td>";
-                    break;
-                default:
-                    tableBody += "<td>" + elem[header] + "</td>";
-                    // console.log(elem[header]);
-                    //у объекта elem забираю по ключу заголовка данные 
-                    //
-                    break;
-
-            }
-           
-            })
-            tableBody += "</tr>"
-        })
-            
-    
-//Записываю в таблицу HTML
-table.innerHTML = contentHeaders + tableBody;
-
-
-
+    clickHandler(++page);
 
     // перебираем массив с объектами arrayWithObjects с помощью метода map
     // метод map получает в качестве первого параметра элемент нашего массива
@@ -211,3 +96,75 @@ table.innerHTML = contentHeaders + tableBody;
     
 
     }
+
+
+function buildTable(data, headers) {
+
+    let contentHeaders = "";
+    let contentBody = "";
+
+    //   Забираю ключи из объекта
+    //       let headers = Object.keys(data[0]);
+    // если нужны все ключи
+
+
+
+    //Создала строку таблицы с помощью конкатенации строк 
+    // в результате будет ("<tr>")
+    contentHeaders += "<tr>";
+
+    //Перебрала массив заголовков и выбрала из массива заголовок
+    headers.map((header) => {
+
+        //добавила динамически заголовок 
+
+        contentHeaders += "<th>" + header + "</th>";
+
+    })
+
+    contentHeaders += "</tr>"
+
+    // Перебрала массив data и выбрала из массива объект elem
+
+    data.map((elem) => {
+
+        contentBody += "<tr>";
+
+
+
+        //Перебираю массив
+        headers.map((header) => {
+
+            // console.log(elem[header]);
+
+            //Конструкция switch cравнивает блоки для совпадения
+            switch (header) {
+                case 'image':
+                    contentBody += "<td><img src='" + elem.image + "'/></td>";
+                    break;
+                default:
+                    contentBody += "<td>" + elem[header] + "</td>";
+                    // console.log(elem[header]);
+                    //у объекта elem забираю по ключу заголовка данные 
+                    //
+                    break;
+
+            }
+           
+            })
+            contentBody += "</tr>"
+        })
+
+
+    
+
+    //Записываю в таблицу HTML
+    return contentHeaders + contentBody;
+
+}
+
+
+// Рефакторинг кода - избавление от дубликата кода
+// Выносим в глобальные переменные , то что используется  в нашем случае это headers,table,page
+// Cоздаем новую функцию buildTable в которую передаем параметры наши данные и заголовки
+// В параметры передаем , то что меняется
